@@ -6,3 +6,151 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+enum Role {
+  CUSTOMER
+  TAILOR
+  FASHION_HOUSE
+  ADMIN
+}
+
+enum FashionHouseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      Role
+
+  fashionHouseOwned FashionHouse? @relation("Owner")
+
+  staffProfile      Staff?
+  customerProfile   Customer? @relation("userCustomer")
+
+  notifications     Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model FashionHouse {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  status    FashionHouseStatus @default(PENDING)
+
+  ownerId   String   @unique
+  owner     User     @relation("Owner", fields: [ownerId], references: [id])
+
+  staff     Staff[]
+  customers Customer[]
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model Staff {
+  id             String @id @default(uuid())
+
+  userId         String @unique
+  user           User   @relation(fields: [userId], references: [id])
+
+  fashionHouseId String
+  fashionHouse   FashionHouse @relation(fields: [fashionHouseId], references: [id])
+
+  role           Role
+
+  orders         Order[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model Customer {
+  id             String @id @default(uuid())
+
+  userId         String? @unique
+  user           User?   @relation("userCustomer", fields: [userId], references: [id])
+
+  phone          String
+  email          String?
+
+  fashionHouseId String?
+  fashionHouse   FashionHouse? @relation(fields: [fashionHouseId], references: [id])
+
+  measurements   Measurement[]
+  orders         Order[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model Measurement {
+  id        String @id @default(uuid())
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  neck       Float
+  chest      Float
+  waist      Float
+  shoulder   Float
+  sleeve     Float
+  hip        Float
+  inseam     Float
+  notes      String?
+
+  createdAt  DateTime @default(now())
+}
+
+
+model Order {
+  id             String @id @default(uuid())
+
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id])
+
+  tailorId       String?
+  tailor         Staff? @relation(fields: [tailorId], references: [id])
+
+  fashionHouseId String?
+  fashionHouse   FashionHouse? @relation(fields: [fashionHouseId], references: [id])
+
+  measurementId  String
+  measurement    Measurement @relation(fields: [measurementId], references: [id])
+
+  status         OrderStatus @default(PENDING)
+  totalPrice     Float
+
+  createdAt      DateTime @default(now())
+}
+
+
+model Notification {
+  id        String @id @default(uuid())
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id])
+
+  message   String
+  read      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
