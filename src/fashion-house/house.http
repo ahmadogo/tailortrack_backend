@@ -1,0 +1,13 @@
+
+
+POST http://localhost:3000/fashion-houses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWRhYmR1bGthcmVlbTQxM0BnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzI4ODgxODEsImV4cCI6MTc3Mjk3NDU4MX0.JfTK-In_MalbQiRHn_Kr6pvwwO7Eh5h4p2HITO1lyTM
+Content-Type: application/json
+
+{
+  "name": "Saurinku Eats",
+  "address": "No 1, MMANN plaza, Kawo, Kaduna"
+}
+
+GET http://localhost:3000/fashion-houses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWRhYmR1bGthcmVlbTQxM0BnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzI4ODgxODEsImV4cCI6MTc3Mjk3NDU4MX0.JfTK-In_MalbQiRHn_Kr6pvwwO7Eh5h4p2HITO1lyTM

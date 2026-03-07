@@ -1,8 +1,18 @@
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 {
-  "name": "ahmadogo",
-  "email": "ahmadabdulkareem413@gmail.com",
+  "name": "abdulmalik",
+  "email": "amalikabdulmalik@gmail.com",
   "password": "Default$123",
-  "role": "ADMIN"
+  "role": "TAILOR"
 }
+
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+{
+  "email": "ahmadabdulkareem413@gmail.com",
+  "password": "Default$123"
+}
+
+

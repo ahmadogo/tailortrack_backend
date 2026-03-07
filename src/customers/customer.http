@@ -1,0 +1,27 @@
+
+POST http://localhost:3000/customers
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "name": "usman Imamu",
+  "email": "imamu@gmail.com",
+  "phone": "08025087789"
+}
+
+GET http://localhost:3000/customers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiYWhtYWRhYmR1bGthcmVlbTQxM0BnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzI5MDM2NzIsImV4cCI6MTc3MjkwNzI3Mn0.BKXkF11SFXs2tl-tza2S16PEYf_J9j5YOGym2RhU26s
+
+GET http://localhost:3000/customers/:id
+Authorization: Bearer 
+
+PATCH http://localhost:3000/customers/:id
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": ""
+  }
+
+DELETE http://localhost:3000/customers/:id
+Authorization: Bearer 

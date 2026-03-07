@@ -12,6 +12,9 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { AdminModule } from './admin/admin.module';
 import { PrismaModule } from './database/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './common/guards/roles.guard';
+import { CustomersService } from './customers/providers/providers.service';
 
 @Module({
   imports: [
@@ -30,6 +33,13 @@ import { ConfigModule } from '@nestjs/config';
     AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    CustomersService,
+  ],
 })
 export class AppModule {}

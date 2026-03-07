@@ -9,6 +9,7 @@ datasource db {
 enum Role {
   ADMIN
   CUSTOMER
+  STAFF
   TAILOR
   FASHION_HOUSE
 }
@@ -35,8 +36,13 @@ model User {
 
   fashionHouseOwned FashionHouse? @relation("Owner")
 
-  staffProfile    Staff?
+  staffMemberships Staff[]
+
+  independentTailorOrders Order[] @relation("IndependentTailorOrders")
+
   customerProfile Customer? @relation("userCustomer")
+
+  customersCreated Customer[] @relation("CustomerCreator")
 
   notifications Notification[]
 
@@ -58,22 +64,24 @@ model FashionHouse {
   orders    Order[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Staff {
   id Int @id @default(autoincrement())
 
-  userId Int  @unique
+  userId Int
   user   User @relation(fields: [userId], references: [id])
 
   fashionHouseId Int
   fashionHouse   FashionHouse @relation(fields: [fashionHouseId], references: [id])
 
-  role Role
-
   orders Order[]
 
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([fashionHouseId])
 }
 
 model Customer {
@@ -82,16 +90,24 @@ model Customer {
   userId Int?  @unique
   user   User? @relation("userCustomer", fields: [userId], references: [id])
 
+  name  String
   phone String
   email String?
 
-  fashionHouseId Int?
-  fashionHouse   FashionHouse? @relation(fields: [fashionHouseId], references: [id])
+  createdByUserId Int?
+  createdByUser   User? @relation("CustomerCreator", fields: [createdByUserId], references: [id])
+
+  createdByFashionHouseId Int?
+  createdByFashionHouse   FashionHouse? @relation(fields: [createdByFashionHouseId], references: [id])
 
   measurements Measurement[]
   orders       Order[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdByUserId])
+  @@index([createdByFashionHouseId])
 }
 
 model Measurement {
@@ -108,9 +124,11 @@ model Measurement {
   hip      Float
   inseam   Float
   notes    String?
-  orders   Order[]
+
+  orders Order[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
@@ -119,8 +137,11 @@ model Order {
   customerId Int
   customer   Customer @relation(fields: [customerId], references: [id])
 
-  tailorId Int?
-  tailor   Staff? @relation(fields: [tailorId], references: [id])
+  tailorUserId Int?
+  tailorUser   User? @relation("IndependentTailorOrders", fields: [tailorUserId], references: [id])
+
+  staffId Int?
+  staff   Staff? @relation(fields: [staffId], references: [id])
 
   fashionHouseId Int?
   fashionHouse   FashionHouse? @relation(fields: [fashionHouseId], references: [id])
@@ -132,6 +153,11 @@ model Order {
   totalPrice Float
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tailorUserId])
+  @@index([staffId])
+  @@index([fashionHouseId])
 }
 
 model Notification {

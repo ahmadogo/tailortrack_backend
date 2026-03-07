@@ -16,7 +16,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(data: RegisterDto) {
+  // Registration  method for new users
+  public async register(data: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -34,6 +35,16 @@ export class AuthService {
         role: data.role,
       },
     });
+    if (user.role === 'CUSTOMER') {
+      await this.prisma.customer.create({
+        data: {
+          name: user.name,
+          userId: user.id,
+          phone: user.phone || '',
+        },
+      });
+    }
+
     const { password, ...result } = user;
 
     return {
@@ -42,18 +53,19 @@ export class AuthService {
     };
   }
 
-  async login(data: LoginDto) {
+  // Login method for existing users
+  public async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
-      where: { email: data.email },
+      where: { email },
     });
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+    const passwordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
+    if (!passwordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -63,16 +75,23 @@ export class AuthService {
       role: user.role,
     };
 
-    const token = await this.jwtService.signAsync(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '1h',
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+    });
 
     return {
-      access_token: token,
       user: {
-        id: user.id,
+        id: user.id.toString(),
         name: user.name,
         email: user.email,
         role: user.role,
       },
+      accessToken,
+      refreshToken,
     };
   }
 }
