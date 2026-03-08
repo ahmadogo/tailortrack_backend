@@ -3,27 +3,54 @@ POST http://localhost:3000/orders
 Authorization: Bearer 
 Content-Type: application/json
 {
-  "customerId": 3,
-  "measurementId": 3,
-  "totalPrice": 12000
+  "customerId": 1,
+  "measurementId": 2,
+  "totalPrice": 20000,
+  "items": [
+    {
+      "garmentTypeId": 1,
+      "fabric": "Shadda",
+      "style": "Babbar riga",
+      "price": 12000
+    },
+    {
+      "garmentTypeId": 2,
+      "fabric": "Yadi",
+      "style": "Simple design",
+      "price": 8000
+    }
+  ]
+}
+
+POST http://localhost:3000/orders/garment
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "name": "Yadi"
 }
 
 
 GET http://localhost:3000/orders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoiYW1hbGlrYWJkdWxtYWxpa0BnbWFpbC5jb20iLCJyb2xlIjoiVEFJTE9SIiwiaWF0IjoxNzcyOTcyNTU1LCJleHAiOjE3NzI5NzYxNTV9.C4dW53vANg6HbgmXYw7ubfWLnc_1FONcfx-L7PfaZJs
+Authorization: Bearer 
 
 
 
 GET http://localhost:3000/orders/1  
 Authorization: Bearer 
 
-PATCH http://localhost:3000/orders/1/status
+PATCH http://localhost:3000/orders/3/status
 Authorization: Bearer 
 Content-Type: application/json
 {
   "status": "COMPLETED"
 }
 
+PATCH http://localhost:3000/orders/items/3/status
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "status": "COMPLETED"
+}
 
 DELETE http://localhost:3000/orders/1
 Authorization: Bearer 

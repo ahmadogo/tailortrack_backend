@@ -17,6 +17,7 @@ import { OrdersService } from './providers/orders.service';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { CreateGarmentTypeDto } from './dto/create-garment-type.dto';
 
 @Controller('orders')
 @UseGuards(JwtAuthGuard)
@@ -26,22 +27,36 @@ export class OrdersController {
   @Post()
   @UseGuards(RolesGuard)
   @Roles(Role.TAILOR, Role.FASHION_HOUSE)
-  create(@Body() dto: CreateOrderDto, @Req() req) {
-    return this.ordersService.create(dto, req.user);
+  createOrder(@Body() dto: CreateOrderDto, @Req() req) {
+    return this.ordersService.createOrder(dto, req.user);
+  }
+
+  @Post('garment')
+  @UseGuards(RolesGuard)
+  @Roles(Role.TAILOR, Role.FASHION_HOUSE)
+  createGarmentType(@Body() dto: CreateGarmentTypeDto) {
+    return this.ordersService.createGarmentType(dto);
+  }
+
+  @Get('garments')
+  @UseGuards(RolesGuard)
+  @Roles(Role.TAILOR, Role.FASHION_HOUSE)
+  findAllGarments() {
+    return this.ordersService.findAllGarments();
   }
 
   @Get()
   @UseGuards(RolesGuard)
   @Roles(Role.TAILOR, Role.FASHION_HOUSE)
-  findAll(@Req() req) {
-    return this.ordersService.findAll(req.user);
+  findAllOrders(@Req() req) {
+    return this.ordersService.findAllOrders(req.user);
   }
 
   @Get(':id')
   @UseGuards(RolesGuard)
   @Roles(Role.TAILOR, Role.FASHION_HOUSE)
   findOne(@Param('id') id: string, @Req() req) {
-    return this.ordersService.findOne(Number(id), req.user);
+    return this.ordersService.findOneOrder(Number(id), req.user);
   }
 
   @Patch(':id/status')
@@ -49,6 +64,13 @@ export class OrdersController {
   @Roles(Role.TAILOR, Role.FASHION_HOUSE)
   updateStatus(@Param('id') id: string, @Body() dto: UpdateOrderStatusDto) {
     return this.ordersService.updateStatus(Number(id), dto);
+  }
+
+  @Patch('items/:id/status')
+  @UseGuards(RolesGuard)
+  @Roles(Role.TAILOR, Role.FASHION_HOUSE)
+  updateItemStatus(@Param('id') id: string, @Body() dto: UpdateOrderStatusDto) {
+    return this.ordersService.updateItemStatus(+id, dto);
   }
 
   @Delete(':id')

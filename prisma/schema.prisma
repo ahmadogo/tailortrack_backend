@@ -149,6 +149,8 @@ model Order {
   measurementId Int
   measurement   Measurement @relation(fields: [measurementId], references: [id])
 
+  items OrderItem[] 
+
   status     OrderStatus @default(PENDING)
   totalPrice Float
 
@@ -158,6 +160,37 @@ model Order {
   @@index([tailorUserId])
   @@index([staffId])
   @@index([fashionHouseId])
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  garmentTypeId Int
+  garmentType   GarmentType @relation(fields: [garmentTypeId], references: [id])
+
+  fabric String?
+  style  String?
+  price  Float
+
+  status OrderStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+}
+
+model GarmentType {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
 }
 
 model Notification {
