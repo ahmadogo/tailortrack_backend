@@ -1,0 +1,41 @@
+// Create measurement for customer with id 1
+POST http://localhost:3000/measurements/3
+Authorization: Bearer 
+Content-Type: application/json
+{
+  "neck": 15,
+  "chest": 20,
+  "waist": 13,
+  "shoulder": 18,
+  "sleeve": 24,
+  "hip": 38,
+  "inseam": 30,
+  "notes": " BAGYI style , the hand should be Cuff links"
+}
+
+// Edit measurement with id 1
+PATCH http://localhost:3000/measurements/2
+Authorization: Bearer 
+Content-Type: application/json
+{
+    "hip": 17   
+}     
+
+
+// Get all measurements 
+GET http://localhost:3000/measurements
+Authorization: Bearer 
+
+
+// Get all customer measurements with id 1
+GET http://localhost:3000/measurements/customer/1
+Authorization: Bearer 
+
+
+// Get measurement with id 1
+GET http://localhost:3000/measurements/1
+Authorization: Bearer 
+
+// Delete measurement with id 1
+DELETE http://localhost:3000/measurements/1
+Authorization: Bearer 

@@ -35,10 +35,6 @@ import { CustomersService } from './customers/providers/providers.service';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
     CustomersService,
   ],
 })

@@ -68,10 +68,14 @@ export class CustomersService {
   }
 
   async remove(id: number, user: any) {
-    await this.findOne(id, user);
+    const customer = await this.findOne(id, user);
 
-    return this.prisma.customer.delete({
+    await this.prisma.customer.delete({
       where: { id },
     });
+
+    return {
+      message: `Customer ${customer.name} has been deleted`,
+    };
   }
 }

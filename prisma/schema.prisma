@@ -117,12 +117,12 @@ model Measurement {
   customer   Customer @relation(fields: [customerId], references: [id])
 
   neck     Float
-  chest    Float
-  waist    Float
+  chest    Float?
+  waist    Float?
   shoulder Float
   sleeve   Float
-  hip      Float
-  inseam   Float
+  hip      Float?
+  inseam   Float?
   notes    String?
 
   orders Order[]
